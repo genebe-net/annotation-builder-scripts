@@ -1,0 +1,246 @@
+# Annotation Database Description. This file is in TOML format.
+# Edit it using your favorite text editor.
+# Created: Thu Jan 16 18:13:57 CET 2025
+
+
+# Title of the database. Short and descriptive.
+title = "Title of clinvar"
+
+# Owner of the database. It's your GeneBe login or name of your GeneBe organization.
+owner = "@genebe"
+
+# Name of the database. 
+name = "clinvar"
+
+# Semantic version of the database.
+version = "0.0.1-20250115"
+
+# If true, user must explictely accept the license online to access the database. Otherwise the acceptance is implicit.
+licenseAcceptRequired = false
+
+# Type of the license. Possible values are:
+#    - NOT_SPECIFIED: Not specified 
+#    - CC_BY_4_0: Creative Commons Attribution 4.0 (https://creativecommons.org/licenses/by/4.0/)
+#    - CC_BY_SA_4_0: Creative Commons Attribution-ShareAlike 4.0 (https://creativecommons.org/licenses/by-sa/4.0/)
+#    - CC_BY_NC_4_0: Creative Commons Attribution-NonCommercial 4.0 (https://creativecommons.org/licenses/by-nc/4.0/)
+#    - CC_BY_NC_SA_4_0: Creative Commons Attribution-NonCommercial-ShareAlike 4.0 (https://creativecommons.org/licenses/by-nc-sa/4.0/)
+#    - CC0: Creative Commons Zero (Public Domain Dedication) (https://creativecommons.org/publicdomain/zero/1.0/)
+#    - ODC_BY: Open Data Commons Attribution License (https://opendatacommons.org/licenses/by/)
+#    - ODC_ODbL: Open Data Commons Open Database License (ODbL) (https://opendatacommons.org/licenses/odbl/)
+#    - ODC_PDDL: Open Data Commons Public Domain Dedication and License (PDDL) (https://opendatacommons.org/licenses/pddl/)
+#    - APACHE_2_0: Apache License 2.0 (https://www.apache.org/licenses/LICENSE-2.0)
+#    - MIT: MIT License (https://opensource.org/licenses/MIT)
+#    - GPL_3_0: GNU General Public License v3.0 (https://www.gnu.org/licenses/gpl-3.0.html)
+#    - LGPL_3_0: GNU Lesser General Public License v3.0 (https://www.gnu.org/licenses/lgpl-3.0.html)
+#    - BSD_3_CLAUSE: BSD 3-Clause License (https://opensource.org/licenses/BSD-3-Clause)
+#    - UNLICENSE: The Unlicense (Public Domain) (https://unlicense.org/)
+#    - OTHER: Other/Custom License 
+# In case of custom license, paste it to the LICENSE.txt file.
+licenseType = "NOT_SPECIFIED"
+# Labels for categorizing the database. For example: "cancer", "splicing", "frequency".
+labels = []
+
+# Genome name, e.g., GRCh38.
+genome = "GRCh38"
+
+# Species name, e.g., homo_sapiens.
+species = "homo_sapiens"
+
+# Type of the annotation. Don't edit manually. Possible values are:
+#    - VARIANT; join columns: _seq,_pos,_del,_ins 
+#    - POSITION; join columns: _seq,_pos 
+#    - REGION; join columns: _seq,_start,_end 
+#    - GENE_HGNC; join columns: _hgnc_id 
+#    - GENE_ENSEMBL; join columns: _ensembl_id 
+
+type = "VARIANT"
+# Columns in the database, possible types are: float32, float64, int16, int32, int64, string, bool.
+# Include human readable description for your columns. Ignore columns starting with _, these are metadata
+
+[[columns]]
+name = "_pos"
+type = "int32"
+description = "Zero based position on the chromosome."
+
+[[columns]]
+name = "_del"
+type = "int16"
+description = "Number of deleted bases."
+
+[[columns]]
+name = "_ins"
+type = "string"
+description = "Inserted sequence. Upper cased. "
+
+[[columns]]
+name = "CLNDN"
+type = "string"
+description = "ClinVar's preferred disease name for the concept specified by disease identifiers in CLNDISDB"
+
+[[columns]]
+name = "CLNREVSTAT"
+type = "string"
+description = "ClinVar review status of germline classification for the Variation ID"
+
+[[columns]]
+name = "CLNSIG"
+type = "string"
+description = "Aggregate germline classification for this single variant; multiple values are separated by a vertical bar"
+
+[[columns]]
+name = "ONCDN"
+type = "string"
+description = "ClinVar's preferred disease name for the concept specified by disease identifiers in ONCDISDB"
+
+[[columns]]
+name = "ONC"
+type = "string"
+description = "Aggregate oncogenicity classification for this single variant; multiple values are separated by a vertical bar"
+
+[[columns]]
+name = "ONCREVSTAT"
+type = "string"
+description = "ClinVar review status of oncogenicity classification for the Variation ID"
+
+[[columns]]
+name = "SCIDN"
+type = "string"
+description = "ClinVar's preferred disease name for the concept specified by disease identifiers in SCIDISDB"
+
+[[columns]]
+name = "SCI"
+type = "string"
+description = "Aggregate somatic clinical impact for this single variant; multiple values are separated by a vertical bar"
+
+[[columns]]
+name = "SCIREVSTAT"
+type = "string"
+description = "ClinVar review status of somatic clinical impact for the Variation ID"
+
+[[columns]]
+name = "_seq"
+type = "string"
+description = "Chromosome symbol, without 'chr' prefix. M for Mitochondrial DNA."
+
+# Files associated with the database, don't edit this section manually.
+
+
+[[files]]
+fileName = "parquet/_seq=8/data_0.parquet"
+xxh32sum = "e507e3b2"
+
+[[files]]
+fileName = "parquet/_seq=NT_187661.1/data_0.parquet"
+xxh32sum = "406fc031"
+
+[[files]]
+fileName = "parquet/_seq=16/data_0.parquet"
+xxh32sum = "d4bb8010"
+
+[[files]]
+fileName = "parquet/_seq=17/data_0.parquet"
+xxh32sum = "e1703c87"
+
+[[files]]
+fileName = "parquet/_seq=12/data_0.parquet"
+xxh32sum = "33b114aa"
+
+[[files]]
+fileName = "parquet/_seq=4/data_0.parquet"
+xxh32sum = "f158cecd"
+
+[[files]]
+fileName = "parquet/_seq=2/data_0.parquet"
+xxh32sum = "3c8f436b"
+
+[[files]]
+fileName = "parquet/_seq=9/data_0.parquet"
+xxh32sum = "72f8dab2"
+
+[[files]]
+fileName = "parquet/_seq=15/data_0.parquet"
+xxh32sum = "bc1ec1f2"
+
+[[files]]
+fileName = "parquet/_seq=5/data_0.parquet"
+xxh32sum = "03e92e13"
+
+[[files]]
+fileName = "parquet/_seq=11/data_0.parquet"
+xxh32sum = "32ae8990"
+
+[[files]]
+fileName = "parquet/_seq=NT_113889.1/data_0.parquet"
+xxh32sum = "cf8ddaaa"
+
+[[files]]
+fileName = "parquet/_seq=20/data_0.parquet"
+xxh32sum = "fba9d178"
+
+[[files]]
+fileName = "parquet/_seq=NW_009646201.1/data_0.parquet"
+xxh32sum = "a1a278c0"
+
+[[files]]
+fileName = "parquet/_seq=1/data_0.parquet"
+xxh32sum = "c700d7cd"
+
+[[files]]
+fileName = "parquet/_seq=14/data_0.parquet"
+xxh32sum = "502e95c0"
+
+[[files]]
+fileName = "parquet/_seq=19/data_0.parquet"
+xxh32sum = "46fc26f2"
+
+[[files]]
+fileName = "parquet/_seq=NT_187693.1/data_0.parquet"
+xxh32sum = "563f3f1f"
+
+[[files]]
+fileName = "parquet/_seq=NT_187633.1/data_0.parquet"
+xxh32sum = "a9b38810"
+
+[[files]]
+fileName = "parquet/_seq=6/data_0.parquet"
+xxh32sum = "326c168b"
+
+[[files]]
+fileName = "parquet/_seq=10/data_0.parquet"
+xxh32sum = "c7db096a"
+
+[[files]]
+fileName = "parquet/_seq=X/data_0.parquet"
+xxh32sum = "3a13d2b5"
+
+[[files]]
+fileName = "parquet/_seq=21/data_0.parquet"
+xxh32sum = "74553b51"
+
+[[files]]
+fileName = "parquet/_seq=Y/data_0.parquet"
+xxh32sum = "a1637a87"
+
+[[files]]
+fileName = "parquet/_seq=7/data_0.parquet"
+xxh32sum = "b681a610"
+
+[[files]]
+fileName = "parquet/_seq=13/data_0.parquet"
+xxh32sum = "f3e872d0"
+
+[[files]]
+fileName = "parquet/_seq=18/data_0.parquet"
+xxh32sum = "5fa6a7d2"
+
+[[files]]
+fileName = "parquet/_seq=M/data_0.parquet"
+xxh32sum = "3c56d960"
+
+[[files]]
+fileName = "parquet/_seq=3/data_0.parquet"
+xxh32sum = "da1109b1"
+
+[[files]]
+fileName = "parquet/_seq=22/data_0.parquet"
+xxh32sum = "00e471a5"
