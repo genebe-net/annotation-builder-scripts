@@ -1,0 +1,5 @@
+**/genebe-cli-latest.jar
+**/*.gz
+**/*.bz2
+**/*.log
+**/.venv
