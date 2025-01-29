@@ -4,3 +4,5 @@
 
 ClinVar is open for contributions—anyone can submit genetic variant data for review. The database is **updated weekly** to ensure the information remains current and relevant.
 
+### Build data
+This database was build using the https://github.com/genebe-net/annotation-builder-scripts/tree/main/clinvar script.
