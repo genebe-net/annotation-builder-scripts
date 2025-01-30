@@ -18,11 +18,11 @@ zcat GCF_000001405.40.gz \
 | sed -e 's!^chr!!' \
 | bcftools query -f '%CHROM\t%POS\t%REF\t%ALT\t%INFO/RS\n' \
 | awk 'BEGIN {print "chr\tpos\tref\talt\trs"} {print}' \
-| bzip2 > GCF_000001405.40.tsv.bz2
+| gzip > GCF_000001405.40.tsv.gz
 
 echo "Create the database"
 java -jar $GENEBE_CLIENT_JAR annotation create-from-tsv \
-    --input GCF_000001405.40.tsv.bz2 \
+    --input GCF_000001405.40.tsv.gz \
     --name "dbsnp" \
     --owner @genebe \
     --version 0.0.1-156.1 \
