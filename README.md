@@ -11,3 +11,11 @@ These recipes demonstrate how to import databases originally distributed as `VCF
 ## Repository format
 For each database (or database group) create a directory with `script.sh` and `README.md` files.
 
+# Dependencies
+Some of processes requires:
+* java (21+)
+* Python (3.10+)
+* Apache Spark ( https://spark.apache.org/ 
+* )
+* bcftools ( https://github.com/samtools/bcftools )
+* `bigWigToBedGraph`

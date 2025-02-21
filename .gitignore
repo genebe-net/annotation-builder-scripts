@@ -5,3 +5,6 @@
 **/.venv
 **/*.parquet
 **/*.zip
+**/*.bgz
+**/*.bw
+**/*.bedGraph
