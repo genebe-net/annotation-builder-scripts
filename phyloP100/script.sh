@@ -6,26 +6,38 @@ GENOME=/data/reference-seq/hg38/hg38.fa
 source ../_utils/download_genebe.sh
 
 echo "Downloading the data"
-wget -nc https://hgdownload.cse.ucsc.edu/goldenpath/hg38/phyloP100way/hg38.phyloP100way.bw
-wget -nc https://hgdownload.cse.ucsc.edu/goldenpath/hg19/phyloP100way/hg19.100way.phyloP100way.bw
+if [ ! -f hg38.phyloP100way.bw ]; then
+    wget https://hgdownload.cse.ucsc.edu/goldenpath/hg38/phyloP100way/hg38.phyloP100way.bw
+fi
+
+if [ ! -f hg19.100way.phyloP100way.bw ]; then
+    wget https://hgdownload.cse.ucsc.edu/goldenpath/hg19/phyloP100way/hg19.100way.phyloP100way.bw
+fi
 
 echo "Convert to bedgraph"
-../_utils/bigWigToBedGraph hg38.phyloP100way.bw hg38.bedGraph
-../_utils/bigWigToBedGraph hg19.100way.phyloP100way.bw hg19.bedGraph
+if [ ! -f hg38.bedGraph ]; then
+    ../_utils/bigWigToBedGraph hg38.phyloP100way.bw hg38.bedGraph
+fi
+if [ ! -f hg19.bedGraph ]; then
+    ../_utils/bigWigToBedGraph hg19.100way.phyloP100way.bw hg19.bedGraph
+fi
 
 echo "Split multi bp ranges into single positions"
-echo -e "chr\tpos\tscore" | bzip2 > hg38.single.bedGraph.bz2
-awk '{
-    for (i = $2; i < $3; i++)
-        print $1, i, i+1, $4
-}' hg38.bedGraph | cut -f1,2,4 | bzip2 >> hg38.single.bedGraph.bz2
+if [ ! -f hg38.single.bedGraph.bz2 ]; then
+    echo -e "chr\tpos\tscore" | bzip2 > hg38.single.bedGraph.bz2
+    awk '{
+        for (i = $2; i < $3; i++)
+            print $1, i, i+1, $4
+    }' hg38.bedGraph | tr ' ' '\t' | cut -f1,2,4 | bzip2 >> hg38.single.bedGraph.bz2
+fi
 
-echo -e "chr\tpos\tscore"| bzip2   > hg19.single.bedGraph.bz2
-awk '{
-    for (i = $2; i < $3; i++)
-        print $1, i, i+1, $4
-}' hg19.bedGraph | cut -f1,2,4 | bzip2  >> hg19.single.bedGraph.bz2
-
+if [ ! -f hg19.single.bedGraph.bz2 ]; then
+    echo -e "chr\tpos\tscore"| bzip2   > hg19.single.bedGraph.bz2
+    awk '{
+        for (i = $2; i < $3; i++)
+            print $1, i, i+1, $4
+    }' hg19.bedGraph | tr ' ' '\t' | cut -f1,2,4 | bzip2  >> hg19.single.bedGraph.bz2
+fi
 
 
 echo "Create the database, I will use PySpark for this task. Ensure to provide the Spark environment."

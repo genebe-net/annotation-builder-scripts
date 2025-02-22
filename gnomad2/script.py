@@ -5,6 +5,7 @@ findspark.init()
 from pyspark.sql import SparkSession
 from pyspark.sql.functions import col, udf
 from pyspark.sql.types import StructType, StructField, StringType, IntegerType
+import os
 
 # Parse arguments
 parser = argparse.ArgumentParser(description="Process input data with PySpark.")
@@ -14,11 +15,15 @@ parser.add_argument(
 )
 args = parser.parse_args()
 
+tmp_dir = os.getenv("SPARK_TMP_DIR", "/tmp")
+
+
 # Initialize Spark session. Be warned: a lot of memory is needed for this task
 spark = (
     SparkSession.builder.appName("GnomAD")
     .config("spark.driver.memory", "64g")
     .config("spark.executor.memory", "64g")
+    .config("spark.local.dir", tmp_dir)
     .getOrCreate()
 )
 
