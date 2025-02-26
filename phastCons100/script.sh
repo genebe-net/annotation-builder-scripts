@@ -6,20 +6,20 @@ GENOME=/data/reference-seq/hg38/hg38.fa
 source ../_utils/download_genebe.sh
 
 echo "Downloading the data"
-if [ ! -f hg38.phyloP100way.bw ]; then
-    wget https://hgdownload.cse.ucsc.edu/goldenpath/hg38/phyloP100way/hg38.phyloP100way.bw
+if [ ! -f hg38.phastCons100way.bw ]; then
+    wget https://hgdownload.cse.ucsc.edu/goldenpath/hg38/phastCons100way/hg38.phastCons100way.bw
 fi
 
-if [ ! -f hg19.100way.phyloP100way.bw ]; then
-    wget https://hgdownload.cse.ucsc.edu/goldenpath/hg19/phyloP100way/hg19.100way.phyloP100way.bw
+if [ ! -f hg19.100way.phastCons.bw ]; then
+    wget https://hgdownload.cse.ucsc.edu/goldenpath/hg19/phastCons100way/hg19.100way.phastCons.bw
 fi
 
 echo "Convert to bedgraph"
 if [ ! -f hg38.bedGraph ]; then
-    ../_utils/bigWigToBedGraph hg38.phyloP100way.bw hg38.bedGraph
+    ../_utils/bigWigToBedGraph hg38.phastCons100way.bw hg38.bedGraph
 fi
 if [ ! -f hg19.bedGraph ]; then
-    ../_utils/bigWigToBedGraph hg19.100way.phyloP100way.bw hg19.bedGraph
+    ../_utils/bigWigToBedGraph hg19.100way.phastCons.bw hg19.bedGraph
 fi
 
 echo "Split multi bp ranges into single positions"
@@ -69,25 +69,25 @@ echo "Converting parquet to GeneBe Annotation"
 
 java -jar $GENEBE_CLIENT_JAR annotation create-from-parquet \
     --input hg38.parquet \
-    --name phylop100_hg38 \
+    --name phastcons100_hg38 \
     --owner @genebe \
     --version 0.0.1 \
     --database-type "POSITION" \
-    --title "phylop100" \
+    --title "phastCons100" \
     --species homo_sapies \
     --genome GRCh38
 
 java -jar $GENEBE_CLIENT_JAR annotation create-from-parquet \
     --input hg19.parquet \
-    --name phylop100_hg19 \
+    --name phastcons100_hg19 \
     --owner @genebe \
     --version 0.0.1 \
     --database-type "POSITION" \
-    --title "phylop100" \
+    --title "phastCons100" \
     --species homo_sapies \
     --genome GRCh37
 
 
 echo "Push annotatioin to the hub. I assume you are already logged in GeneBe Hub."
-echo "java -jar $GENEBE_CLIENT_JAR annotation push --id @genebe/phylop100_hg19:0.0.1 --public true"
-echo "java -jar $GENEBE_CLIENT_JAR annotation push --id @genebe/phylop100_hg38:0.0.1 --public true"
+echo "java -jar $GENEBE_CLIENT_JAR annotation push --id @genebe/phastcons100_hg38:0.0.1 --public true"
+echo "java -jar $GENEBE_CLIENT_JAR annotation push --id @genebe/phastcons100_hg19:0.0.1 --public true"
