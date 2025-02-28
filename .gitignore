@@ -8,3 +8,5 @@
 **/*.bgz
 **/*.bw
 **/*.bedGraph
+**/*.tgz
+bayesdel/GRCh38
