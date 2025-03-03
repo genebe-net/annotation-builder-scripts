@@ -6,16 +6,16 @@ source ../_utils/download_genebe.sh
 
 TODAY=$(date +"%Y%m%d")
 
-echo "Downloading the mitomap polymorphisms data"
-if [ -f mitomap_polymorphisms-$TODAY.tsv ]; then
-    echo "File mitomap_polymorphisms-$TODAY.tsv already exists. Skip download."
+echo "Downloading the mitomap disease data"
+if [ -f mitomap_disease-$TODAY.tsv ]; then
+    echo "File mitomap_disease-$TODAY.tsv already exists. Skip download."
 else
-    wget https://mitomap.org/cgi-bin/polymorphisms.cgi -O mitomap_polymorphisms-$TODAY.tsv
+    wget https://www.mitomap.org/cgi-bin/disease.cgi -O mitomap_disease-$TODAY.tsv
 fi
 
 
 # add the chr column; replace non breaking space with space
-awk 'BEGIN{OFS="\t"} NR==1{print $0, "chr"; next} {print $0, "M"}' mitomap_polymorphisms-$TODAY.tsv \
+awk 'BEGIN{OFS="\t"} NR==1{print $0, "chr"; next} {print $0, "M"}' mitomap_disease-$TODAY.tsv \
     | tr '\240' ' ' > with_chr.tsv
 
 echo "Process input data. Mitotip gbfreq is in percentage, so we need to divide by 100"
@@ -37,7 +37,12 @@ pip install -r requirements.txt
 
 # Run your Python script
 python script.py --input 'with_chr.tsv' --output ready.tsv
-NAME=mitomap-polymorphisms
+
+# Deactivate virtual environment
+deactivate
+
+
+NAME=mitomap-disease
 
 VERSION=0.0.1-$TODAY
 
@@ -45,7 +50,7 @@ java -jar $GENEBE_CLIENT_JAR  annotation create-from-tsv \
     --owner @genebe \
     --name $NAME \
     --version $VERSION \
-    --title "Mitomap Polymorphisms" \
+    --title "Mitomap Disease" \
     --columns pos:int32 chr:text ref:text alt:text pubmed_ids:text gbcnt:int32 gbfreq:float32 \
     --excluded-columns id aachange \
     --input ready.tsv \
