@@ -10,3 +10,5 @@
 **/*.bedGraph
 **/*.tgz
 bayesdel/GRCh38
+**/*.tsv
+**/*.csv
