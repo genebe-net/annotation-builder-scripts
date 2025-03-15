@@ -58,3 +58,4 @@ java -jar $GENEBE_CLIENT_JAR  annotation create-from-tsv \
 
 echo "Push annotatioin to the hub. I assume you are already logged in GeneBe Hub."
 echo "java -jar $GENEBE_CLIENT_JAR annotation push --id @genebe/$NAME:$VERSION --public true"
+java -jar $GENEBE_CLIENT_JAR annotation push --id @genebe/$NAME:$VERSION --public true

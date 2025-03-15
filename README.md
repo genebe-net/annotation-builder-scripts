@@ -9,13 +9,12 @@ Since the [format](https://genebe.net/about/hub-format) is standardized and base
 These recipes demonstrate how to import databases originally distributed as `VCF` or `TSV` files using different methods. I encourage you to build your own scripts and contribute new, valuable databases to GeneBe Hub. This repository is also open to pull requests.
 
 ## Repository format
-For each database (or database group) create a directory with `script.sh` and `README.md` files.
+For each database (or database group) create a directory with `script.sh` and `README.md` files. To create the annotation just run `script.sh`.
 
 # Dependencies
 Some of processes requires:
 * java (21+)
-* Python (3.10+)
-* Apache Spark ( https://spark.apache.org/ 
-* )
+* Python (3.10+), with pip
+* Apache Spark ( https://spark.apache.org/ )
 * bcftools ( https://github.com/samtools/bcftools )
-* `bigWigToBedGraph`
+* `bigWigToBedGraph` (included in `_utils` )

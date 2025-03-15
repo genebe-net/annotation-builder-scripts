@@ -11,14 +11,25 @@ mv clinvar.vcf.gz clinvar-$CLINVAR_DATE.vcf.gz
 
 echo "ClinVar date: $CLINVAR_DATE"
 
+echo "Removing commas from CLNREVSTAT, ONCREVSTAT, SCIREVSTAT, otherwise they are read as lists and incorrectly parsed"
+zcat clinvar-$CLINVAR_DATE.vcf.gz \
+    | sed ':a; s/\(CLNREVSTAT=[^;]*\),/\1/; ta' \
+    | sed ':a; s/\(ONCREVSTAT=[^;]*\),/\1/; ta' \
+    | sed ':a; s/\(SCIREVSTAT=[^;]*\),/\1/; ta' \
+    | gzip > clinvar-processed.vcf.gz
+
 echo "Converting ClinVar VCF to GeneBe Annotation"
 
+VERSION=0.0.2-$CLINVAR_DATE
+NAME=clinvar
+OWNER=@genebe
+
 java -jar $GENEBE_CLIENT_JAR annotation create-from-vcf \
-    --input-vcf clinvar-$CLINVAR_DATE.vcf.gz \
-    --name clinvar \
-    --owner @genebe \
-    --version 0.0.1-$CLINVAR_DATE \
-    --columns CLNDN:TEXT CLNREVSTAT CLNSIG ONCDN ONC ONCREVSTAT SCIDN SCI SCIREVSTAT \
+    --input-vcf clinvar-processed.vcf.gz \
+    --name $NAME \
+    --owner $OWNER \
+    --version $VERSION \
+    --columns CLNDN:TEXT CLNREVSTAT CLNSIG CLNSIGCONF ONCDN ONC ONCREVSTAT ONCCONF SCIDN SCI SCIREVSTAT ORIGIN \
     --title "A Public Database of Genetic Variants" \
     --species homo_sapies \
     --genome GRCh38 \
@@ -27,4 +38,4 @@ java -jar $GENEBE_CLIENT_JAR annotation create-from-vcf \
     --metadata-source ./description.toml
 
 echo "Push annotatioin to the hub. I assume you are already logged in GeneBe Hub."
-java -jar $GENEBE_CLIENT_JAR annotation push --id @genebe/clinvar:0.0.1-$CLINVAR_DATE --public true
+java -jar $GENEBE_CLIENT_JAR annotation push --id $OWNER/$NAME:$VERSION --public true
