@@ -30,10 +30,10 @@ for GENOME in GRCh37 GRCh38; do
             exit 1
         fi
 
-        # deduplicate on ID; add ID to the INFO columns
+        # deduplicate on ID
         zcat $INPUT_FILE \
             | awk '!/^#/ { if (!seen[$3]++) print; next } 1' \
-            | /usr/bin/bcftools annotate -c ID,INFO/CosmicId -h <(echo '##INFO=<ID=CosmicId,Number=1,Type=String,Description="COSMIC ID">') -Oz -o Cosmic_${TYPE}_Normal_v${VERSION}_${GENOME}_ready.vcf.gz
+            | gzip > Cosmic_${TYPE}_Normal_v${VERSION}_${GENOME}_ready.vcf.gz
 
         # convert NAME to lowercase
         NAME=$(echo cosmic-${TYPE}-${GENOME_HG} | tr '[:upper:]' '[:lower:]')
@@ -44,7 +44,7 @@ for GENOME in GRCh37 GRCh38; do
             --version 0.0.1-${VERSION} \
             --title "COSMIC v$VERSION $TYPE $GENOME" \
             --input-vcf Cosmic_${TYPE}_Normal_v${VERSION}_${GENOME}_ready.vcf.gz \
-            --columns $SAMPLE_COUNT_COLUMN_NAME TIER \
+            --columns $SAMPLE_COUNT_COLUMN_NAME TIER ID \
             --genome $GENOME
     done
 
