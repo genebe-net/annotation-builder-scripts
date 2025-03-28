@@ -8,10 +8,12 @@ source ../_utils/download_genebe.sh
 echo "Downloading the newest dbSNP VCF file"
 wget -nc https://ftp.ncbi.nih.gov/snp/latest_release/VCF/GCF_000001405.40.gz
 
+echo "I replace the header of the input vcf to have ##contig data populated"
+echo "I also replace NC_ codes with chr"
 
 if [ ! -f GCF_000001405.40.tsv.bz2 ]; then
     echo "Normalize & convert to tsv"
-    zcat GCF_000001405.40.gz \
+    (cat head.vcf; zcat GCF_000001405.40.gz | grep -v -E '^#') \
     | sed -e 's/^NC_0000\([0-9][0-9]\)\.[0-9]*/\1/' \
     | sed -e 's/^0//' -e 's/^23/X/' -e 's/^24/Y/' -e 's/NC_012920\.[0-9]*/M/' \
     | grep -v -e '^NW_' -e '^NT_'  \
