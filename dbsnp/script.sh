@@ -53,7 +53,7 @@ java -jar $GENEBE_CLIENT_JAR annotation create-from-parquet \
     --input GCF_000001405.40.parquet \
     --name dbsnp \
     --owner @genebe \
-    --version 0.0.1-156.1 \
+    --version 0.0.1-157 \
     --title "dbSNP" \
     --species homo_sapies \
     --genome GRCh38
