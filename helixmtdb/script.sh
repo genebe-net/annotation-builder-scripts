@@ -11,44 +11,39 @@ if [ ! -f HelixMTdb_20200327.tsv ]; then
 fi
 
 
-for GENOME in GRCh37 GRCh38; do
-    # if GENOME is GRCh37, then GENOME_HG is hg19, otherwise hg38; use bash if / else statements
-    GENOME_HG=$(if [ $GENOME == "GRCh37" ]; then echo "hg19"; else echo "hg38"; fi)
+# Directory for virtual environment
+VENV_DIR=".venv"
 
-    echo "Processing $GENOME"
-    for TYPE in GenomeScreensMutant NonCodingVariants; do
-        echo "Processing $TYPE"
+# Create virtual environment if it doesn't exist
+if [ ! -d "$VENV_DIR" ]; then
+    echo "Creating virtual environment..."
+    python3 -m venv $VENV_DIR
 
-        if [ $TYPE == "NonCodingVariants" ]; then
-            SAMPLE_COUNT_COLUMN_NAME="SAMPLE_COUNT"
-        else
-            SAMPLE_COUNT_COLUMN_NAME="GENOME_SCREEN_SAMPLE_COUNT"
-        fi
+    # Activate virtual environment
+    source $VENV_DIR/bin/activate
 
-        # f.ex. Cosmic_GenomeScreensMutant_Normal_v101_GRCh38.vcf.gz
-        INPUT_FILE=Cosmic_${TYPE}_Normal_v${VERSION}_$GENOME.vcf.gz
-        if [ ! -f $INPUT_FILE ]; then
-            echo "There is no $INPUT_FILE, please download it from https://cancer.sanger.ac.uk/cosmic/download/cosmic"
-            exit 1
-        fi
+    # Install requirements
+    echo "Installing requirements..."
+    pip install -r requirements.txt
+else
+    source $VENV_DIR/bin/activate
+fi
 
-        # deduplicate on ID; add ID to the INFO columns
-        zcat $INPUT_FILE \
-            | awk '!/^#/ { if (!seen[$3]++) print; next } 1' \
-            | /usr/bin/bcftools annotate -c ID,INFO/CosmicId -h <(echo '##INFO=<ID=CosmicId,Number=1,Type=String,Description="COSMIC ID">') -Oz -o Cosmic_${TYPE}_Normal_v${VERSION}_${GENOME}_ready.vcf.gz
+echo "Making the liftover, I will call python GeneBe script"
 
-        # convert NAME to lowercase
-        NAME=$(echo cosmic-${TYPE}-${GENOME_HG} | tr '[:upper:]' '[:lower:]')
-
-        java -jar $GENEBE_CLIENT_JAR annotation create-from-vcf \
-            --owner @genebe \
-            --name $NAME \
-            --version 0.0.1-${VERSION} \
-            --title "COSMIC v$VERSION $TYPE $GENOME" \
-            --input-vcf Cosmic_${TYPE}_Normal_v${VERSION}_${GENOME}_ready.vcf.gz \
-            --columns $SAMPLE_COUNT_COLUMN_NAME TIER \
-            --genome $GENOME
-    done
+# Run your Python script
+if [ ! -f cm_all_download_hg38.tsv ]; then
+    python script.py --input HelixMTdb_20200327.tsv --output ready.tsv
+fi
 
 
-done
+# Deactivate virtual environment
+deactivate
+
+java -jar $GENEBE_CLIENT_JAR  annotation create-from-tsv \
+    --owner @genebe \
+    --name helixmtdb \
+    --version 0.0.1 \
+    --title "HelixMtDB" \
+    --input ready.tsv \
+    --genome GRCh38
